@@ -3,16 +3,17 @@ import os
 import pickle
 import random
 
-from elm import ELMClassifier
+from ELMR import ELMClassifier
 from preprocess import process_image
 from sklearn.model_selection import train_test_split
 
 def generatePickle():
+    data = []
     categories = ['binata', 'buhay', 'dalaga', 'eksamen', 'ewan', 'gunita', 'halaman', 'hapon', 'isip', 'kailangan',
              'karaniwan', 'kislap', 'larawan', 'mabuti', 'noon', 'opo', 'papaano', 'patuloy', 'roon', 'subalit',
               'talaga', 'ugali', 'wasto']
-    data = []
-    dir = 'Braille2C_Datasets\\'
+    
+    dir = 'C:\\Users\\Scadoodie\\Desktop\\Braille2C_Datasets'
 
     print('Generating pickle model...')
 
@@ -36,9 +37,9 @@ def generatePickle():
         print("Data is empty")
     else:
         #Data length should contain 1180 images
-        print("Success! braille_model.pickle generated.")
+        print("Success! braille-model.pickle generated.")
         print("Data Length: ", len(data))
-        pick_in = open('braille_model.pickle','wb')
+        pick_in = open('braille-model.pickle','wb')
         pickle.dump(data,pick_in)
         pick_in.close()
 
@@ -46,7 +47,7 @@ def generateELM():
     features = []
     labels = []
 
-    pick_in = open('braille_model.pickle', 'rb')
+    pick_in = open('braille-model.pickle', 'rb')
     data = pickle.load(pick_in)
     pick_in.close()
 
@@ -62,8 +63,8 @@ def generateELM():
     model = ELMClassifier(n_hidden=500, activation_func='multiquadric')
     model.fit(xtrain, ytrain)
 
-    print("Success! braille.sav generated.")
-    pick = open('braille.sav','wb')
+    print("Success! braille-ELM.sav generated.")
+    pick = open('braille-ELM.sav','wb')
     pickle.dump(model,pick)
     pick.close()
 
@@ -72,7 +73,7 @@ def updateModel(data):
     features = []
     labels = []
 
-    pick_in = open('braille_model.pickle', 'rb')
+    pick_in = open('braille-model.pickle', 'rb')
     data = pickle.load(pick_in)
     pick_in.close()
 
@@ -88,13 +89,13 @@ def updateModel(data):
     model = ELMClassifier(n_hidden=500, activation_func='multiquadric')
     model.fit(xtrain, ytrain)
 
-    pick = open('braille.sav','rb')
+    pick = open('braille-ELM.sav','rb')
     model = pickle.load(pick)
 
     return model, xtrain, xtest, ytrain, ytest
     
 def getPickle():
-    pick = open('braille_model.pickle','rb')
+    pick = open('braille-model.pickle','rb')
     model=pickle.load(pick)
     pick.close()
     return model
